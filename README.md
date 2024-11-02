@@ -3,8 +3,9 @@
 This is a Next.js project for monitoring and logging animal behaviors. The system provides a web interface where researchers and volunteers can log and track animal behaviors for conservation and study purposes.
 
 ## Getting Started
+You can go to this website to access the app: https://animal-behavior-monitoring.vercel.app/
 
-To run this project locally, please follow these steps after cloning the repo:
+Or, if you want to run this project locally, please follow these steps after cloning the repo:
 
 1. **Install Dependencies**:
    Make sure you have all the necessary dependencies by running:
