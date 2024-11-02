@@ -1,10 +1,8 @@
 'use client';
 import React from 'react';
-import { useRouter } from 'next/navigation';
 
 const AnimalProfile = ({ params }: { params: { species: string; animalId: string } }) => {
-  const router = useRouter();
-  const { species, animalId } = params;
+  const { species } = params;
 
   // Mock data for individual animal profile
   const animalProfileData = {
