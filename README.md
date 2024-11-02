@@ -1,36 +1,32 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Animal Behavior Logging Tool
+
+This is a Next.js project for monitoring and logging animal behaviors. The system provides a web interface where researchers and volunteers can log and track animal behaviors for conservation and study purposes.
 
 ## Getting Started
 
-First, run the development server:
+To run this project locally, please follow these steps after cloning the repo:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+1. **Install Dependencies**:
+   Make sure you have all the necessary dependencies by running:
+   ```bash
+   npm install
+   ```
+   
+2. **Set up Convex:**:
+   - Create a Convex account at https://dashboard.convex.dev
+   - Create a new project in Convex dashboard
+   - Get the deployment URL
+   - Create a .env.local file in the root directory with:
+   ```bash
+    NEXT_PUBLIC_CONVEX_URL=your_convex_deployment_url
+    ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+3. **Start the Convex Server**:
+   ```bash
+   npx convex dev
+   ```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+4. **Start the development Server**:
+   ```bash
+   npm run dev
+   ```
