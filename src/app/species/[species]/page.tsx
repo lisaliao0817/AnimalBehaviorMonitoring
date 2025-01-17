@@ -2,6 +2,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import ProtectedRoute from '@/components/ProtectedRoute';
 
 const SpeciesPage = ({ params }: { params: { species: string } }) => {
   const router = useRouter();
@@ -23,6 +24,7 @@ const SpeciesPage = ({ params }: { params: { species: string } }) => {
   const individuals = speciesData[species] || [];
 
   return (
+    <ProtectedRoute>
     <div className="flex min-h-screen">
       {/* Sidebar */}
       <aside className="w-64 bg-lavender-100 p-6">
@@ -101,6 +103,7 @@ const SpeciesPage = ({ params }: { params: { species: string } }) => {
         </table>
       </div>
     </div>
+    </ProtectedRoute>
   );
 };
 

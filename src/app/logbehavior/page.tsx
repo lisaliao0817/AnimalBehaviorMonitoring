@@ -1,4 +1,5 @@
 'use client';
+import ProtectedRoute from '@/components/ProtectedRoute';
 import React from 'react';
 import Link from 'next/link';
 import { useMutation } from 'convex/react';
@@ -40,6 +41,7 @@ const LogBehavior = () => {
     };
 
   return (
+    <ProtectedRoute>
     <div className="flex min-h-screen">
       {/* Sidebar */}
       <aside className="w-64 bg-lavender-100 p-6">
@@ -140,6 +142,7 @@ const LogBehavior = () => {
         </div>
       </div>
     </div>
+    </ProtectedRoute>
   );
 };
 

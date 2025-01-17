@@ -1,4 +1,5 @@
 'use client';
+import ProtectedRoute from '@/components/ProtectedRoute';
 import React from 'react';
 
 const AnimalProfile = ({ params }: { params: { species: string; animalId: string } }) => {
@@ -24,6 +25,7 @@ const AnimalProfile = ({ params }: { params: { species: string; animalId: string
   ];
 
   return (
+    <ProtectedRoute>
     <div className="flex min-h-screen">
       {/* Sidebar */}
       <aside className="w-64 bg-lavender-100 p-6">
@@ -155,6 +157,7 @@ const AnimalProfile = ({ params }: { params: { species: string; animalId: string
         </table>
       </div>
     </div>
+    </ProtectedRoute>
   );
 };
 

@@ -1,4 +1,5 @@
 'use client';
+import ProtectedRoute from '@/components/ProtectedRoute';
 import React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -13,6 +14,7 @@ const Species = () => {
   ];
 
   return (
+    <ProtectedRoute>
     <div className="flex min-h-screen">
       {/* Sidebar */}
       <aside className="w-64 bg-lavender-100 p-6">
@@ -76,6 +78,7 @@ const Species = () => {
         </div>
       </div>
     </div>
+    </ProtectedRoute>
   );
 };
 
