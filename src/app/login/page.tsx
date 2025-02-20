@@ -5,6 +5,7 @@ import { api } from '@/convex/_generated/api';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
+import { Id } from '@/convex/_generated/dataModel';
 
 const Login = () => {
   const router = useRouter();
@@ -35,8 +36,13 @@ const Login = () => {
         password: formData.password,
       });
       
-      // Store user data and token in AuthContext
-      auth.login(userData);
+      auth.login({
+        userId: userData.userId as Id<"staff">,
+        organizationId: userData.organizationId as Id<"organizations">,
+        role: userData.role as "admin" | "user",
+        token: userData.token,
+      });
+      
       router.push('/');
     } catch (error) {
       setError('Invalid email or password');

@@ -1,36 +1,31 @@
 'use client';
-import React, { useState, useEffect } from 'react';
-import { useMutation, useQuery } from 'convex/react';
+import React, { useState } from 'react';
+import { useMutation } from 'convex/react';
 import { api } from '@/convex/_generated/api';
-import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
+import Link from 'next/link';
 
 const SignUp = () => {
   const router = useRouter();
+  const createOrg = useMutation(api.auth.createOrganization);
+  const createUser = useMutation(api.auth.createStaffMember);
   const searchParams = useSearchParams();
-  const inviteCode = searchParams.get('invite');
-  
-  const createStaff = useMutation(api.auth.createStaffMember);
-  const inviteInfo = useQuery(api.auth.validateInvite, inviteCode ? { inviteCode } : "skip");
+  const inviteFromUrl = searchParams.get('invite');
   
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
+    role: inviteFromUrl ? 'user' : 'admin',
+    organizationName: '',
+    organizationAddress: '',
+    inviteCode: inviteFromUrl || '',
   });
+
   const [error, setError] = useState('');
 
-  useEffect(() => {
-    if (inviteInfo) {
-      setFormData(prev => ({
-        ...prev,
-        email: inviteInfo.email
-      }));
-    }
-  }, [inviteInfo]);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
@@ -42,48 +37,43 @@ const SignUp = () => {
     e.preventDefault();
     setError('');
 
-    if (!inviteCode) {
-      setError('Invalid invite code');
-      return;
-    }
-
     if (formData.password !== formData.confirmPassword) {
       setError('Passwords do not match');
       return;
     }
 
     try {
-      await createStaff({
-        name: formData.name,
-        email: formData.email,
-        password: formData.password,
-        inviteCode,
-      });
+      if (formData.role === 'admin') {
+        await createOrg({
+          name: formData.name,
+          email: formData.email,
+          password: formData.password,
+          organizationName: formData.organizationName,
+          organizationAddress: formData.organizationAddress,
+        });
+      } else {
+        if (!formData.inviteCode) {
+          setError('Invite code is required');
+          return;
+        }
+        await createUser({
+          name: formData.name,
+          email: formData.email,
+          password: formData.password,
+          inviteCode: formData.inviteCode,
+        });
+      }
       
       router.push('/login');
     } catch (error) {
       setError(error instanceof Error ? error.message : 'Failed to create account');
-      console.error('Signup error:', error);
     }
   };
-
-  if (!inviteCode) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-lavender-100">
-        <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-          <h1 className="text-2xl font-bold mb-6 text-center">Invalid Invite</h1>
-          <p className="text-center text-gray-600">
-            You need an invitation to sign up. Please contact your organization administrator.
-          </p>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-lavender-100">
       <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-        <h1 className="text-2xl font-bold mb-6 text-center">Create Staff Account</h1>
+        <h1 className="text-2xl font-bold mb-6 text-center">Sign Up</h1>
         
         {error && (
           <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
@@ -91,8 +81,23 @@ const SignUp = () => {
           </div>
         )}
 
-        <form onSubmit={handleSubmit}>
-          <div className="mb-4">
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Role
+            </label>
+            <select
+              name="role"
+              value={formData.role}
+              onChange={handleChange}
+              className="w-full border border-gray-300 rounded-lg px-3 py-2"
+            >
+              <option value="user">User</option>
+              <option value="admin">Admin</option>
+            </select>
+          </div>
+
+          <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Name
             </label>
@@ -106,7 +111,7 @@ const SignUp = () => {
             />
           </div>
 
-          <div className="mb-4">
+          <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Email
             </label>
@@ -116,12 +121,11 @@ const SignUp = () => {
               value={formData.email}
               onChange={handleChange}
               className="w-full border border-gray-300 rounded-lg px-3 py-2"
-              disabled
               required
             />
           </div>
 
-          <div className="mb-4">
+          <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Password
             </label>
@@ -135,7 +139,7 @@ const SignUp = () => {
             />
           </div>
 
-          <div className="mb-6">
+          <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Confirm Password
             </label>
@@ -149,15 +153,61 @@ const SignUp = () => {
             />
           </div>
 
+          {formData.role === 'admin' ? (
+            <>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Organization Name
+                </label>
+                <input
+                  type="text"
+                  name="organizationName"
+                  value={formData.organizationName}
+                  onChange={handleChange}
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Organization Address
+                </label>
+                <input
+                  type="text"
+                  name="organizationAddress"
+                  value={formData.organizationAddress}
+                  onChange={handleChange}
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2"
+                  required
+                />
+              </div>
+            </>
+          ) : (
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Invite Code
+              </label>
+              <input
+                type="text"
+                name="inviteCode"
+                value={formData.inviteCode}
+                onChange={handleChange}
+                className="w-full border border-gray-300 rounded-lg px-3 py-2"
+                required
+              />
+            </div>
+          )}
+
           <button
             type="submit"
-            className="w-full bg-black text-white font-semibold py-2 rounded-lg mb-4"
+            className="w-full bg-black text-white font-semibold py-2 rounded-lg"
           >
             Sign Up
           </button>
         </form>
 
-        <p className="text-center text-sm text-gray-600">
+        <p className="mt-4 text-center text-sm text-gray-600">
           Already have an account?{' '}
           <Link href="/login" className="text-black font-semibold">
             Log in

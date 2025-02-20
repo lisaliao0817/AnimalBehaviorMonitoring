@@ -4,17 +4,20 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 
 export default function ProtectedRoute({ children }: { children: React.ReactNode }) {
+  const { user, isLoading } = useAuth();
   const router = useRouter();
-  const auth = useAuth();
 
   useEffect(() => {
-    if (!auth.user) {
+    if (!isLoading && !user) {
       router.push('/login');
     }
-  }, [auth.user, router]);
+  }, [user, isLoading, router]);
 
-  // Show nothing while checking authentication
-  if (!auth.user) {
+  if (isLoading) {
+    return <div>Loading...</div>; // Or your loading component
+  }
+
+  if (!user) {
     return null;
   }
 

@@ -1,6 +1,7 @@
 import './globals.css';
 import type { Metadata } from 'next';
 import { ConvexClientProvider } from './ConvexClientProvider';
+import { AuthProvider } from '@/context/AuthContext';
 
 export const metadata: Metadata = {
   title: 'Animal Behavior Monitoring',
@@ -15,7 +16,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <ConvexClientProvider>{children}</ConvexClientProvider>
+        <ConvexClientProvider>
+          <AuthProvider>
+            {children}
+          </AuthProvider>
+        </ConvexClientProvider>
       </body>
     </html>
   );
