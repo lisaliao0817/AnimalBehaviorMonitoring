@@ -28,7 +28,7 @@ export const sendInviteEmail = action({
           <h1>Welcome to ${args.organizationName}</h1>
           <p>You've been invited to join our organization.</p>
           <p>Your invite code is: <strong>${args.inviteCode}</strong></p>
-          <p>Click <a href="${process.env.SITE_URL}/signup?invite=${args.inviteCode}">here</a> to sign up.</p>
+          <p>Click <a href="${process.env.SITE_URL}/?signup=true&invite=${args.inviteCode}&logout=true">here</a> to sign up.</p>
           <p>This invite code will allow you to create an account as a user in our organization.</p>
         `
       });

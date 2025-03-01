@@ -67,4 +67,15 @@ export default defineSchema({
     .index("by_staffId", ["staffId"])
     .index("by_animalId", ["animalId"])
     .index("by_createdAt", ["createdAt"]),
+
+  commonBehaviors: defineTable({
+    name: v.string(),
+    speciesId: v.id("species"),
+    createdBy: v.id("staff"),
+    createdAt: v.number(), // Unix timestamp
+    description: v.string(),
+    organizationId: v.id("organizations"), // Adding organizationId for consistency
+  }).index("by_organizationId", ["organizationId"])
+    .index("by_speciesId", ["speciesId"])
+    .index("by_createdBy", ["createdBy"]),
 });

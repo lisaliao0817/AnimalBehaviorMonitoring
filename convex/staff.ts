@@ -321,4 +321,20 @@ export const countByOrganization = query({
     
     return staffMembers.length;
   },
+});
+
+// Get staff members by IDs
+export const getByIds = query({
+  args: { ids: v.array(v.id("staff")) },
+  handler: async (ctx, args) => {
+    const { ids } = args;
+    
+    // Fetch all staff members in one go
+    const staffMembers = await Promise.all(
+      ids.map(id => ctx.db.get(id))
+    );
+    
+    // Filter out any null values (in case some IDs don't exist)
+    return staffMembers.filter(staff => staff !== null);
+  },
 }); 

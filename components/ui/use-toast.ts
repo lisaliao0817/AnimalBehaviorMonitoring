@@ -8,7 +8,6 @@ import type {
 } from "@/components/ui/toast"
 
 const TOAST_LIMIT = 5
-const TOAST_REMOVE_DELAY = 1000000
 
 type ToasterToast = ToastProps & {
   id: string
@@ -84,10 +83,11 @@ const reducer = (state: State, action: Action): State => {
           toastTimeouts.delete(toastId)
         }
       } else {
-        for (const [id, timeout] of toastTimeouts.entries()) {
+        // Convert Map entries to array to avoid downlevelIteration issues
+        Array.from(toastTimeouts.entries()).forEach(([id, timeout]) => {
           clearTimeout(timeout)
           toastTimeouts.delete(id)
-        }
+        })
       }
 
       return {

@@ -25,7 +25,7 @@ export default function DashboardPage() {
 
   const organizationId = session?.user?.organizationId;
   const organization = useQuery(api.organizations.getById, 
-    organizationId ? { id: organizationId } : 'skip'
+    organizationId ? { id: organizationId as Id<"organizations"> } : 'skip'
   );
 
   if (!organizationId || !organization) {

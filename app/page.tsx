@@ -1,19 +1,30 @@
 'use client';
 
-import { useSession } from 'next-auth/react';
-import { redirect } from 'next/navigation';
-import { useEffect } from 'react';
+import { useSession, signOut } from 'next-auth/react';
+import { redirect, useSearchParams } from 'next/navigation';
+import { useEffect, Suspense } from 'react';
 import AuthForm from '@/components/auth/auth-form';
 import { Loader2 } from 'lucide-react';
 
-export default function Home() {
-  const { data: session, status } = useSession();
+function HomeContent() {
+  const { status } = useSession();
+  const searchParams = useSearchParams();
+  const showSignup = searchParams.get('signup') === 'true';
+  const inviteCode = searchParams.get('invite') || '';
+  const shouldLogout = searchParams.get('logout') === 'true';
 
   useEffect(() => {
-    if (status === 'authenticated') {
+    // If logout parameter is present and user is authenticated, sign out
+    if (shouldLogout && status === 'authenticated') {
+      signOut({ redirect: false });
+      return;
+    }
+
+    // Only redirect to dashboard if user is authenticated and not trying to logout
+    if (status === 'authenticated' && !shouldLogout) {
       redirect('/dashboard');
     }
-  }, [status]);
+  }, [status, shouldLogout]);
 
   if (status === 'loading') {
     return (
@@ -31,11 +42,25 @@ export default function Home() {
             Animal Behavior Monitoring
           </h1>
           <p className="mt-2 text-sm text-muted-foreground">
-            Sign in to your account to continue
+            {showSignup 
+              ? "Create an account to join the organization" 
+              : "Sign in to your account to continue"}
           </p>
         </div>
-        <AuthForm />
+        <AuthForm defaultTab={showSignup ? 'signup' : 'login'} inviteCode={inviteCode} />
       </div>
     </main>
+  );
+}
+
+export default function Home() {
+  return (
+    <Suspense fallback={
+      <div className="flex h-screen w-full items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    }>
+      <HomeContent />
+    </Suspense>
   );
 } 

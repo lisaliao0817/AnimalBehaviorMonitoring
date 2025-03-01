@@ -13,6 +13,7 @@ import { toast } from 'sonner';
 import { api } from '@/convex/_generated/api';
 import { useAction } from 'convex/react';
 import { signIn } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
 // Define common fields
 const commonFields = {
@@ -62,12 +63,17 @@ type DefaultValues = {
   organizationAddress: string;
 };
 
-export default function SignupForm() {
+interface SignupFormProps {
+  defaultInviteCode?: string;
+}
+
+export default function SignupForm({ defaultInviteCode = '' }: SignupFormProps) {
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
   
-  // Use type assertion to fix the API reference errors
-  const createAdmin = useAction(api.staff.createAdmin as any);
-  const createUser = useAction(api.staff.createUser as any);
+  // Use proper type definitions instead of 'any'
+  const createAdmin = useAction(api.staff.createAdmin);
+  const createUser = useAction(api.staff.createUser);
 
   const form = useForm<SignupFormValues>({
     resolver: zodResolver(signupSchema),
@@ -76,8 +82,8 @@ export default function SignupForm() {
       email: '',
       password: '',
       confirmPassword: '',
-      role: 'user',
-      inviteCode: '',
+      role: defaultInviteCode ? 'user' : 'admin',
+      inviteCode: defaultInviteCode,
       organizationName: '',
       organizationAddress: '',
     } as DefaultValues,
@@ -111,11 +117,16 @@ export default function SignupForm() {
       });
 
       // Sign in the user
-      await signIn('credentials', {
+      const result = await signIn('credentials', {
         email: data.email,
         password: data.password,
         redirect: false,
       });
+
+      if (result?.ok) {
+        // Redirect to dashboard after successful sign-in
+        router.push('/dashboard');
+      }
     } catch (error) {
       toast.error('Error', {
         description: error instanceof Error ? error.message : 'Something went wrong. Please try again.',
@@ -139,6 +150,7 @@ export default function SignupForm() {
                   onValueChange={field.onChange}
                   value={field.value}
                   className="flex flex-col space-y-1"
+                  disabled={!!defaultInviteCode}
                 >
                   <FormItem className="flex items-center space-x-3 space-y-0">
                     <FormControl>
@@ -259,7 +271,12 @@ export default function SignupForm() {
               <FormItem>
                 <FormLabel>Invite Code</FormLabel>
                 <FormControl>
-                  <Input placeholder="Enter invite code" {...field} />
+                  <Input 
+                    placeholder="Enter invite code" 
+                    {...field} 
+                    readOnly={!!defaultInviteCode}
+                    className={defaultInviteCode ? "bg-muted" : ""}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
