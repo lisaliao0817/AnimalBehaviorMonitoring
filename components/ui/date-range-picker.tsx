@@ -54,12 +54,13 @@ export function DateRangePicker({
         </PopoverTrigger>
         <PopoverContent className="w-auto p-0" align="start">
           <Calendar
-            initialFocus
             mode="range"
             defaultMonth={value?.from}
             selected={value}
             onSelect={onChange}
             numberOfMonths={2}
+            fromYear={new Date().getFullYear() - 5}
+            toYear={new Date().getFullYear() + 5}
           />
         </PopoverContent>
       </Popover>
