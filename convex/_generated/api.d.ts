@@ -16,6 +16,7 @@ import type {
 import type * as animals from "../animals.js";
 import type * as behaviors from "../behaviors.js";
 import type * as bodyExams from "../bodyExams.js";
+import type * as commonBehaviors from "../commonBehaviors.js";
 import type * as email from "../email.js";
 import type * as organizations from "../organizations.js";
 import type * as species from "../species.js";
@@ -33,6 +34,7 @@ declare const fullApi: ApiFromModules<{
   animals: typeof animals;
   behaviors: typeof behaviors;
   bodyExams: typeof bodyExams;
+  commonBehaviors: typeof commonBehaviors;
   email: typeof email;
   organizations: typeof organizations;
   species: typeof species;

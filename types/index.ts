@@ -155,4 +155,13 @@ declare module "next-auth" {
   interface Session {
     user: User;
   }
+}
+
+export interface CommonBehavior {
+  id: Id<"commonBehaviors">;
+  name: string;
+  description?: string;
+  speciesId: Id<"species">;
+  createdAt: number;
+  createdBy: Id<"staff">;
 } 

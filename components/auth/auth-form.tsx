@@ -1,18 +1,28 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import LoginForm from './login-form';
 import SignupForm from './signup-form';
 
-export default function AuthForm() {
-  const [activeTab, setActiveTab] = useState<'login' | 'signup'>('login');
+interface AuthFormProps {
+  defaultTab?: 'login' | 'signup';
+  inviteCode?: string;
+}
+
+export default function AuthForm({ defaultTab = 'login', inviteCode = '' }: AuthFormProps) {
+  const [activeTab, setActiveTab] = useState<'login' | 'signup'>(defaultTab);
+
+  // Update active tab if defaultTab changes
+  useEffect(() => {
+    setActiveTab(defaultTab);
+  }, [defaultTab]);
 
   return (
     <Card className="w-full">
       <CardHeader>
-        <Tabs defaultValue="login" value={activeTab} onValueChange={(value) => setActiveTab(value as 'login' | 'signup')}>
+        <Tabs defaultValue={activeTab} value={activeTab} onValueChange={(value) => setActiveTab(value as 'login' | 'signup')}>
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="login">Login</TabsTrigger>
             <TabsTrigger value="signup">Sign Up</TabsTrigger>
@@ -25,7 +35,7 @@ export default function AuthForm() {
             <LoginForm />
           </TabsContent>
           <TabsContent value="signup">
-            <SignupForm />
+            <SignupForm defaultInviteCode={inviteCode} />
           </TabsContent>
         </Tabs>
       </CardContent>

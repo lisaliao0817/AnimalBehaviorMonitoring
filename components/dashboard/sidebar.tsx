@@ -16,8 +16,11 @@ import {
   Home, 
   Menu, 
   PawPrint, 
-  Users 
+  Users,
+  Plus,
+  Activity
 } from 'lucide-react';
+import { Separator } from '@/components/ui/separator';
 
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -47,18 +50,18 @@ export function Sidebar({ className }: SidebarProps) {
       href: '/dashboard/animals',
       active: pathname === '/dashboard/animals',
     },
-    {
-      label: 'Behaviors',
-      icon: ClipboardList,
-      href: '/dashboard/behaviors',
-      active: pathname === '/dashboard/behaviors',
-    },
-    {
-      label: 'Body Exams',
-      icon: FileText,
-      href: '/dashboard/body-exams',
-      active: pathname === '/dashboard/body-exams',
-    },
+    // {
+    //   label: 'Behaviors',
+    //   icon: ClipboardList,
+    //   href: '/dashboard/behaviors',
+    //   active: pathname === '/dashboard/behaviors',
+    // },
+    // {
+    //   label: 'Body Exams',
+    //   icon: FileText,
+    //   href: '/dashboard/body-exams',
+    //   active: pathname === '/dashboard/body-exams',
+    // },
     {
       label: 'Reports',
       icon: BarChart3,
@@ -113,6 +116,26 @@ export function Sidebar({ className }: SidebarProps) {
                   {route.label}
                 </Link>
               ))}
+              
+              <Separator className="my-2" />
+              
+              <h3 className="px-3 text-xs font-medium text-muted-foreground">Quick Actions</h3>
+              
+              <Link
+                href="/dashboard/animals/register"
+                className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground"
+              >
+                <Plus className="h-4 w-4" />
+                Register Animal
+              </Link>
+              
+              <Link
+                href="/dashboard/behaviors/record"
+                className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground"
+              >
+                <Activity className="h-4 w-4" />
+                Record Behavior
+              </Link>
             </nav>
           </ScrollArea>
         </div>
@@ -160,6 +183,28 @@ function MobileSidebar({ routes, setOpen }: MobileSidebarProps) {
               {route.label}
             </Link>
           ))}
+          
+          <Separator className="my-2" />
+          
+          <h3 className="px-3 text-xs font-medium text-muted-foreground">Quick Actions</h3>
+          
+          <Link
+            href="/dashboard/animals/register"
+            onClick={() => setOpen(false)}
+            className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground"
+          >
+            <Plus className="h-4 w-4" />
+            Register Animal
+          </Link>
+          
+          <Link
+            href="/dashboard/behaviors/record"
+            onClick={() => setOpen(false)}
+            className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground"
+          >
+            <Activity className="h-4 w-4" />
+            Record Behavior
+          </Link>
         </nav>
       </ScrollArea>
     </div>
