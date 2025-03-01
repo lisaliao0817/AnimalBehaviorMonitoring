@@ -27,7 +27,7 @@ import {
 import { toast } from 'sonner';
 import { Loader2 } from 'lucide-react';
 import { Id } from '@/convex/_generated/dataModel';
-import { Animal, AnimalGender, AnimalStatus } from '@/types';
+import { Animal } from '@/types';
 import { SpeciesCombobox } from '@/components/species/species-combobox';
 
 const animalSchema = z.object({

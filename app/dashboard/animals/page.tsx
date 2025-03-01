@@ -8,7 +8,6 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Plus, Filter, X } from 'lucide-react';
 import { Id } from '@/convex/_generated/dataModel';
-import { Animal } from '@/types';
 import { AnimalDialog } from '@/components/animals/animal-dialog';
 import { Badge } from '@/components/ui/badge';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -27,7 +26,6 @@ export default function AnimalsPage() {
   
   const { data: session } = useSession();
   const [showAnimalDialog, setShowAnimalDialog] = useState(false);
-  const [selectedAnimal, setSelectedAnimal] = useState<Animal | undefined>();
   const [selectedSpeciesId, setSelectedSpeciesId] = useState<string | null>(speciesFilter);
 
   // Update the selected species when the URL parameter changes
@@ -86,11 +84,6 @@ export default function AnimalsPage() {
       default:
         return 'bg-gray-500';
     }
-  };
-
-  const formatDate = (timestamp?: number) => {
-    if (!timestamp) return 'Not specified';
-    return new Date(timestamp).toLocaleDateString();
   };
 
   // Handle species filter change

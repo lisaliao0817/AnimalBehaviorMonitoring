@@ -2,12 +2,12 @@
 
 import { useSession, signOut } from 'next-auth/react';
 import { redirect, useSearchParams } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, Suspense } from 'react';
 import AuthForm from '@/components/auth/auth-form';
 import { Loader2 } from 'lucide-react';
 
-export default function Home() {
-  const { data: session, status } = useSession();
+function HomeContent() {
+  const { status } = useSession();
   const searchParams = useSearchParams();
   const showSignup = searchParams.get('signup') === 'true';
   const inviteCode = searchParams.get('invite') || '';
@@ -50,5 +50,17 @@ export default function Home() {
         <AuthForm defaultTab={showSignup ? 'signup' : 'login'} inviteCode={inviteCode} />
       </div>
     </main>
+  );
+}
+
+export default function Home() {
+  return (
+    <Suspense fallback={
+      <div className="flex h-screen w-full items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    }>
+      <HomeContent />
+    </Suspense>
   );
 } 

@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, use } from 'react';
-import { useSession } from 'next-auth/react';
 import { useQuery } from 'convex/react';
 import { api } from '@/convex/_generated/api';
 import { Button } from '@/components/ui/button';
@@ -19,7 +18,6 @@ import React from 'react';
 export default function AnimalDetailsPage({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = use(params);
   const router = useRouter();
-  const { data: session } = useSession();
   const [showEditDialog, setShowEditDialog] = useState(false);
   const [showBehaviorDialog, setShowBehaviorDialog] = useState(false);
   const [showBodyExamDialog, setShowBodyExamDialog] = useState(false);

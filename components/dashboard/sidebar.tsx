@@ -11,8 +11,6 @@ import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { 
   BarChart3, 
   Cat, 
-  ClipboardList, 
-  FileText, 
   Home, 
   Menu, 
   PawPrint, 
@@ -22,7 +20,7 @@ import {
 } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 
-interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {}
+type SidebarProps = React.HTMLAttributes<HTMLDivElement>;
 
 export function Sidebar({ className }: SidebarProps) {
   const pathname = usePathname();

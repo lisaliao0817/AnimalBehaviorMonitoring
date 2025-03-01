@@ -48,6 +48,7 @@ export default function LoginForm() {
         });
       }
     } catch (error) {
+      console.error('Login error:', error);
       toast({
         title: 'Error',
         description: 'Something went wrong. Please try again.',

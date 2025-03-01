@@ -71,9 +71,9 @@ export default function SignupForm({ defaultInviteCode = '' }: SignupFormProps) 
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   
-  // Use type assertion to fix the API reference errors
-  const createAdmin = useAction(api.staff.createAdmin as any);
-  const createUser = useAction(api.staff.createUser as any);
+  // Use proper type definitions instead of 'any'
+  const createAdmin = useAction(api.staff.createAdmin);
+  const createUser = useAction(api.staff.createUser);
 
   const form = useForm<SignupFormValues>({
     resolver: zodResolver(signupSchema),

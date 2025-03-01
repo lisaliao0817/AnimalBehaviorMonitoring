@@ -10,7 +10,6 @@ import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ClipboardList, FileText, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { toast } from 'sonner';
 
 interface ActivityFeedProps {
   organizationId: Id<'organizations'>;
@@ -28,6 +27,8 @@ export function ActivityFeed({
   const [limit] = useState(10);
   const [cursor, setCursor] = useState<string | undefined>(undefined);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
+  
+  // Using any type with ESLint exception
   const [combinedActivity, setCombinedActivity] = useState<any[]>([]);
 
   // Fetch behaviors

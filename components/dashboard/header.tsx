@@ -15,7 +15,6 @@ import {
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { ModeToggle } from '@/components/mode-toggle';
 import { LogOut, Settings, User } from 'lucide-react';
-import { toast } from 'sonner';
 import { Id } from '@/convex/_generated/dataModel';
 
 export function Header() {

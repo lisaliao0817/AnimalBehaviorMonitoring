@@ -30,6 +30,10 @@ export default function StaffPage() {
     organizationId ? { id: organizationId } : "skip"
   );
 
+  // Move hook calls outside of conditional logic
+  const generateInviteCode = useMutation(api.staff.generateInviteCode);
+  const sendInviteEmail = useAction(api.email.sendInviteEmail);
+
   // Check if user is admin
   const isAdmin = user?.role === 'admin';
 
@@ -38,12 +42,6 @@ export default function StaffPage() {
     router.push('/dashboard');
     return null;
   }
-
-  // Use the generateInviteCode mutation
-  const generateInviteCode = useMutation(api.staff.generateInviteCode);
-  
-  // Use the sendInviteEmail action
-  const sendInviteEmail = useAction(api.email.sendInviteEmail);
 
   const handleInvite = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -143,7 +141,7 @@ export default function StaffPage() {
           <CardHeader>
             <CardTitle>Staff Members</CardTitle>
             <CardDescription>
-              View and manage your organization's staff members
+              View and manage your organization&apos;s staff members
             </CardDescription>
           </CardHeader>
           <CardContent>
