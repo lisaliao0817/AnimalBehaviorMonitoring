@@ -62,7 +62,7 @@ export function Header() {
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem asChild>
+            {/* <DropdownMenuItem asChild>
               <Button variant="ghost" className="w-full justify-start" asChild>
                 <a href="/dashboard/profile">
                   <User className="mr-2 h-4 w-4" />
@@ -78,7 +78,7 @@ export function Header() {
                 </a>
               </Button>
             </DropdownMenuItem>
-            <DropdownMenuSeparator />
+            <DropdownMenuSeparator /> */}
             <DropdownMenuItem asChild>
               <Button
                 variant="ghost"

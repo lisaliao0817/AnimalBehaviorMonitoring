@@ -141,7 +141,7 @@ export function ActivityFeed({
         ))}
       </div>
       
-      {(behaviors?.continueCursor || bodyExams?.continueCursor) && (
+      {/* {(behaviors?.continueCursor || bodyExams?.continueCursor) && (
         <div className="flex justify-center">
           <Button
             variant="outline"
@@ -158,7 +158,7 @@ export function ActivityFeed({
             )}
           </Button>
         </div>
-      )}
+      )} */}
     </div>
   );
 }
