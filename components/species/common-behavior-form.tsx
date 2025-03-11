@@ -62,7 +62,7 @@ export function CommonBehaviorForm({ speciesId, onSuccess }: CommonBehaviorFormP
         staffId: session.user.id as Id<"staff">,
       });
       
-      toast.success('Common behavior added successfully');
+      toast.success('Rehabilitation goal added successfully');
       form.reset();
       onSuccess?.();
     } catch (error) {
@@ -84,7 +84,7 @@ export function CommonBehaviorForm({ speciesId, onSuccess }: CommonBehaviorFormP
             <FormItem>
               <FormLabel>Name</FormLabel>
               <FormControl>
-                <Input placeholder="Enter behavior name" {...field} />
+                <Input placeholder="Enter rehabilitation goal" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -98,7 +98,7 @@ export function CommonBehaviorForm({ speciesId, onSuccess }: CommonBehaviorFormP
               <FormLabel>Description</FormLabel>
               <FormControl>
                 <Textarea
-                  placeholder="Enter behavior description"
+                  placeholder="Enter description"
                   {...field}
                 />
               </FormControl>
@@ -113,7 +113,7 @@ export function CommonBehaviorForm({ speciesId, onSuccess }: CommonBehaviorFormP
               Adding...
             </>
           ) : (
-            'Add Common Behavior'
+            'Add Rehabilitation Goal'
           )}
         </Button>
       </form>

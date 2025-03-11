@@ -24,7 +24,7 @@ export function CommonBehaviorDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="bg-white dark:bg-gray-900 border shadow-lg">
         <DialogHeader>
-          <DialogTitle>Add Common Behavior</DialogTitle>
+          <DialogTitle>Add Rehabilitation Goal</DialogTitle>
         </DialogHeader>
         <CommonBehaviorForm
           speciesId={speciesId}

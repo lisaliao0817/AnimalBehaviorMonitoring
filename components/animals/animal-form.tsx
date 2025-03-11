@@ -162,7 +162,7 @@ export function AnimalForm({ animal, onSuccess }: AnimalFormProps) {
           name="dateOfBirth"
           render={({ field }) => (
             <FormItem className="bg-transparent p-0">
-              <FormLabel>Date of Birth</FormLabel>
+              <FormLabel>Date of Admission</FormLabel>
               <FormControl>
                 <Input 
                   type="date" 

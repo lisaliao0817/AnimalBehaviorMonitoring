@@ -233,8 +233,8 @@ export default function SpeciesPage() {
                 <div className="flex items-center justify-between">
                   <CardTitle>
                     {selectedSpeciesId
-                      ? `Common Behaviors - ${currentSpecies?.name}`
-                      : "Common Behaviors"}
+                      ? `Rehabilitation Goals - ${currentSpecies?.name}`
+                      : "Rehabilitation Goals"}
                   </CardTitle>
                   {selectedSpeciesId && (
                     <Button 
@@ -243,7 +243,7 @@ export default function SpeciesPage() {
                       onClick={() => setShowBehaviorDialog(true)}
                     >
                       <Plus className="mr-2 h-4 w-4" />
-                      Add Behavior
+                      Add Rehabilitation Goal
                     </Button>
                   )}
                 </div>
@@ -282,7 +282,7 @@ export default function SpeciesPage() {
                       ))}
                       {commonBehaviors.length === 0 && (
                         <p className="text-center text-sm text-muted-foreground">
-                          No common behaviors defined for this species.
+                          No rehabilitation goals defined for this species.
                         </p>
                       )}
                     </div>
@@ -290,7 +290,7 @@ export default function SpeciesPage() {
                 ) : (
                   <div className="flex h-[calc(100vh-16rem)] items-center justify-center">
                     <p className="text-center text-sm text-muted-foreground">
-                      Select a species to view its common behaviors
+                      Select a species to view its rehabilitation goals
                     </p>
                   </div>
                 )}

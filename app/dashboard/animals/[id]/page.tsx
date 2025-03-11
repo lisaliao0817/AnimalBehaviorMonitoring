@@ -213,7 +213,7 @@ export default function AnimalDetailsPage({ params }: { params: Promise<{ id: st
             <p className="mt-1">{species.name}</p>
           </div>
           <div>
-            <h3 className="text-sm font-medium text-muted-foreground">Date of Birth</h3>
+            <h3 className="text-sm font-medium text-muted-foreground">Date of Admission</h3>
             <p className="mt-1">{formatDate(animal.dateOfBirth)}</p>
           </div>
           <div>
