@@ -9,7 +9,8 @@ import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Loader2 } from 'lucide-react';
-import { useToast } from '@/components/ui/use-toast';
+import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 
 const loginSchema = z.object({
   email: z.string().email({ message: 'Please enter a valid email address' }),
@@ -20,7 +21,7 @@ type LoginFormValues = z.infer<typeof loginSchema>;
 
 export default function LoginForm() {
   const [isLoading, setIsLoading] = useState(false);
-  const { toast } = useToast();
+  const router = useRouter();
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -41,19 +42,13 @@ export default function LoginForm() {
       });
 
       if (result?.error) {
-        toast({
-          title: 'Error',
-          description: 'Invalid email or password',
-          variant: 'destructive',
-        });
+        toast.error('Invalid email or password');
+      } else if (result?.ok) {
+        router.push('/dashboard');
       }
     } catch (error) {
       console.error('Login error:', error);
-      toast({
-        title: 'Error',
-        description: 'Something went wrong. Please try again.',
-        variant: 'destructive',
-      });
+      toast.error('Something went wrong. Please try again.');
     } finally {
       setIsLoading(false);
     }

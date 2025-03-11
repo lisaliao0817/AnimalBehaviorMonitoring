@@ -7,8 +7,6 @@ import { compare } from "bcryptjs";
 const convex = new ConvexHttpClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
 
 export const authOptions: NextAuthOptions = {
-  // Remove the adapter since we can't install @auth/convex-adapter
-  // We'll handle the session manually with JWT
   session: {
     strategy: "jwt",
     maxAge: 30 * 24 * 60 * 60, // 30 days

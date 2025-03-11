@@ -18,20 +18,24 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { AnimalStatus } from '@/types';
 
 export default function AnimalsPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const speciesFilter = searchParams.get('species');
+  const statusFilter = searchParams.get('status') as AnimalStatus | null;
   
   const { data: session } = useSession();
   const [showAnimalDialog, setShowAnimalDialog] = useState(false);
   const [selectedSpeciesId, setSelectedSpeciesId] = useState<string | null>(speciesFilter);
+  const [selectedStatus, setSelectedStatus] = useState<AnimalStatus | null>(statusFilter);
 
-  // Update the selected species when the URL parameter changes
+  // Update the selected filters when URL parameters change
   useEffect(() => {
     setSelectedSpeciesId(speciesFilter);
-  }, [speciesFilter]);
+    setSelectedStatus(statusFilter);
+  }, [speciesFilter, statusFilter]);
 
   const speciesResult = useQuery(
     api.species.getByOrganization,
@@ -43,7 +47,7 @@ export default function AnimalsPage() {
       : "skip"
   );
 
-  // Query animals by species if a species filter is applied, otherwise get all animals
+  // Query animals with both species and status filters
   const animalsResult = useQuery(
     selectedSpeciesId 
       ? api.animals.getBySpecies
@@ -61,11 +65,16 @@ export default function AnimalsPage() {
       : "skip"
   );
 
+  // Filter animals by status on the client side if status filter is applied
+  const filteredAnimals = animalsResult?.page?.filter(animal => 
+    !selectedStatus || animal.status === selectedStatus
+  ) ?? [];
+
   if (!session?.user?.organizationId) {
     return null;
   }
 
-  const animals = animalsResult?.page ?? [];
+  const animals = filteredAnimals;
   const species = speciesResult?.page ?? [];
 
   const getSpeciesName = (speciesId: Id<"species">) => {
@@ -88,21 +97,33 @@ export default function AnimalsPage() {
 
   // Handle species filter change
   const handleSpeciesFilterChange = (value: string) => {
+    const newParams = new URLSearchParams(searchParams.toString());
     if (value === "all") {
-      // Remove the species filter
-      router.push('/dashboard/animals');
-      setSelectedSpeciesId(null);
+      newParams.delete('species');
     } else {
-      // Apply the species filter
-      router.push(`/dashboard/animals?species=${value}`);
-      setSelectedSpeciesId(value);
+      newParams.set('species', value);
     }
+    router.push(`/dashboard/animals?${newParams.toString()}`);
+    setSelectedSpeciesId(value === "all" ? null : value);
   };
 
-  // Clear the species filter
-  const clearSpeciesFilter = () => {
+  // Handle status filter change
+  const handleStatusFilterChange = (value: string) => {
+    const newParams = new URLSearchParams(searchParams.toString());
+    if (value === "all") {
+      newParams.delete('status');
+    } else {
+      newParams.set('status', value);
+    }
+    router.push(`/dashboard/animals?${newParams.toString()}`);
+    setSelectedStatus(value === "all" ? null : value as AnimalStatus);
+  };
+
+  // Clear all filters
+  const clearFilters = () => {
     router.push('/dashboard/animals');
     setSelectedSpeciesId(null);
+    setSelectedStatus(null);
   };
 
   return (
@@ -118,8 +139,9 @@ export default function AnimalsPage() {
       <div className="flex items-center gap-4 mb-4">
         <div className="flex items-center gap-2">
           <Filter className="h-4 w-4 text-muted-foreground" />
-          <span className="text-sm font-medium">Filter by Species:</span>
+          <span className="text-sm font-medium">Filters:</span>
         </div>
+        
         <Select
           value={selectedSpeciesId || "all"}
           onValueChange={handleSpeciesFilterChange}
@@ -136,16 +158,31 @@ export default function AnimalsPage() {
             ))}
           </SelectContent>
         </Select>
+
+        <Select
+          value={selectedStatus || "all"}
+          onValueChange={handleStatusFilterChange}
+        >
+          <SelectTrigger className="w-[200px]">
+            <SelectValue placeholder="Select Status" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Statuses</SelectItem>
+            <SelectItem value="active">Active</SelectItem>
+            <SelectItem value="released">Released</SelectItem>
+            <SelectItem value="deceased">Deceased</SelectItem>
+          </SelectContent>
+        </Select>
         
-        {selectedSpeciesId && (
+        {(selectedSpeciesId || selectedStatus) && (
           <Button 
             variant="ghost" 
             size="sm" 
-            onClick={clearSpeciesFilter}
+            onClick={clearFilters}
             className="text-muted-foreground"
           >
             <X className="h-4 w-4 mr-1" />
-            Clear Filter
+            Clear Filters
           </Button>
         )}
       </div>
@@ -195,7 +232,7 @@ export default function AnimalsPage() {
           </p>
           <Button onClick={() => setShowAnimalDialog(true)}>
             <Plus className="mr-2 h-4 w-4" />
-            Register Your First Animal
+            Register Animal
           </Button>
         </div>
       )}
