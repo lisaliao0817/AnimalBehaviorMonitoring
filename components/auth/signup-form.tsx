@@ -128,9 +128,24 @@ export default function SignupForm({ defaultInviteCode = '' }: SignupFormProps) 
         router.push('/dashboard');
       }
     } catch (error) {
-      toast.error('Error', {
-        description: error instanceof Error ? error.message : 'Something went wrong. Please try again.',
-      });
+      console.error('Signup error:', error);
+      
+      // Handle specific error messages
+      const errorMessage = error instanceof Error ? error.message : 'Something went wrong';
+      
+      if (errorMessage.includes('Email already in use')) {
+        toast.error('Email already registered', {
+          description: 'This email address is already associated with an account. Please use a different email or try logging in.',
+        });
+      } else if (errorMessage.includes('Invalid invite code')) {
+        toast.error('Invalid invite code', {
+          description: 'The invite code you entered is not valid. Please check and try again.',
+        });
+      } else {
+        toast.error('Sign up failed', {
+          description: 'There was a problem creating your account. Please try again.',
+        });
+      }
     } finally {
       setIsLoading(false);
     }
