@@ -286,4 +286,69 @@ export const countByOrganization = query({
     const exams = await examsQuery.collect();
     return exams.length;
   },
+});
+
+// Get body exams by IDs
+export const getByIds = query({
+  args: { ids: v.array(v.id("bodyExams")) },
+  handler: async (ctx, args) => {
+    const { ids } = args;
+    
+    const bodyExams = await Promise.all(
+      ids.map(async (id) => await ctx.db.get(id))
+    );
+    
+    return bodyExams.filter(Boolean); // Filter out any nulls
+  },
+});
+
+// Get body exams for multiple animals by date range
+export const getByAnimalsDateRange = query({
+  args: { 
+    animalIds: v.array(v.id("animals")),
+    startDate: v.number(),
+    endDate: v.number(),
+    limit: v.number(),
+    cursor: v.optional(v.string())
+  },
+  handler: async (ctx, args) => {
+    const { animalIds, startDate, endDate, limit, cursor } = args;
+    
+    // Build a query for each animal ID
+    const queries = animalIds.map(animalId => 
+      ctx.db
+        .query("bodyExams")
+        .withIndex("by_animalId", (q) => q.eq("animalId", animalId))
+        .filter((q) => 
+          q.and(
+            q.gte(q.field("createdAt"), startDate),
+            q.lte(q.field("createdAt"), endDate)
+          )
+        )
+    );
+    
+    // Execute all queries and merge results
+    const results = await Promise.all(
+      queries.map(query => query.collect())
+    );
+    
+    // Flatten the array of arrays
+    const allBodyExams = results.flat();
+    
+    // Sort by createdAt descending
+    allBodyExams.sort((a, b) => b.createdAt - a.createdAt);
+    
+    // Manual pagination
+    const startIndex = cursor ? parseInt(cursor) : 0;
+    const endIndex = startIndex + limit;
+    const page = allBodyExams.slice(startIndex, endIndex);
+    
+    // Create continuation cursor if there are more results
+    const continueCursor = endIndex < allBodyExams.length ? endIndex.toString() : null;
+    
+    return {
+      page,
+      continueCursor
+    };
+  },
 }); 

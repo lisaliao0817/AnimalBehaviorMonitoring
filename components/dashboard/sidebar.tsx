@@ -16,7 +16,8 @@ import {
   PawPrint, 
   Users,
   Plus,
-  Activity
+  Activity,
+  FileText
 } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 
@@ -134,6 +135,14 @@ export function Sidebar({ className }: SidebarProps) {
                 <Activity className="h-4 w-4" />
                 Record Behavior
               </Link>
+              
+              <Link
+                href="/dashboard/body-exams/record"
+                className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground"
+              >
+                <FileText className="h-4 w-4" />
+                Record Body Exam
+              </Link>
             </nav>
           </ScrollArea>
         </div>
@@ -202,6 +211,15 @@ function MobileSidebar({ routes, setOpen }: MobileSidebarProps) {
           >
             <Activity className="h-4 w-4" />
             Record Behavior
+          </Link>
+          
+          <Link
+            href="/dashboard/body-exams/record"
+            onClick={() => setOpen(false)}
+            className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground"
+          >
+            <FileText className="h-4 w-4" />
+            Record Body Exam
           </Link>
         </nav>
       </ScrollArea>

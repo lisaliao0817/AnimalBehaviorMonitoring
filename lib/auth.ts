@@ -3,6 +3,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { api } from "@/convex/_generated/api";
 import { ConvexHttpClient } from "convex/browser";
 import { compare } from "bcryptjs";
+import { getServerSession } from "next-auth";
 
 const convex = new ConvexHttpClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
 
@@ -78,4 +79,12 @@ export const authOptions: NextAuthOptions = {
       return session;
     },
   },
+};
+
+/**
+ * Get the current user's session in server components and API routes
+ */
+export const getAuth = async () => {
+  const session = await getServerSession(authOptions);
+  return session;
 }; 

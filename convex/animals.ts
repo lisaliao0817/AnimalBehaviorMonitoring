@@ -227,4 +227,18 @@ export const countByOrganization = query({
     
     return animals.length;
   },
+});
+
+// Get animals by IDs
+export const getByIds = query({
+  args: { ids: v.array(v.id("animals")) },
+  handler: async (ctx, args) => {
+    const { ids } = args;
+    
+    const animals = await Promise.all(
+      ids.map(async (id) => await ctx.db.get(id))
+    );
+    
+    return animals.filter(Boolean); // Filter out any nulls
+  },
 }); 

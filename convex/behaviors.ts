@@ -288,4 +288,69 @@ export const countByOrganization = query({
     const behaviors = await behaviorsQuery.collect();
     return behaviors.length;
   },
+});
+
+// Get behaviors by IDs
+export const getByIds = query({
+  args: { ids: v.array(v.id("behaviors")) },
+  handler: async (ctx, args) => {
+    const { ids } = args;
+    
+    const behaviors = await Promise.all(
+      ids.map(async (id) => await ctx.db.get(id))
+    );
+    
+    return behaviors.filter(Boolean); // Filter out any nulls
+  },
+});
+
+// Get behaviors for multiple animals by date range
+export const getByAnimalsDateRange = query({
+  args: { 
+    animalIds: v.array(v.id("animals")),
+    startDate: v.number(),
+    endDate: v.number(),
+    limit: v.number(),
+    cursor: v.optional(v.string())
+  },
+  handler: async (ctx, args) => {
+    const { animalIds, startDate, endDate, limit, cursor } = args;
+    
+    // Build a query for each animal ID
+    const queries = animalIds.map(animalId => 
+      ctx.db
+        .query("behaviors")
+        .withIndex("by_animalId", (q) => q.eq("animalId", animalId))
+        .filter((q) => 
+          q.and(
+            q.gte(q.field("createdAt"), startDate),
+            q.lte(q.field("createdAt"), endDate)
+          )
+        )
+    );
+    
+    // Execute all queries and merge results
+    const results = await Promise.all(
+      queries.map(query => query.collect())
+    );
+    
+    // Flatten the array of arrays
+    const allBehaviors = results.flat();
+    
+    // Sort by createdAt descending
+    allBehaviors.sort((a, b) => b.createdAt - a.createdAt);
+    
+    // Manual pagination
+    const startIndex = cursor ? parseInt(cursor) : 0;
+    const endIndex = startIndex + limit;
+    const page = allBehaviors.slice(startIndex, endIndex);
+    
+    // Create continuation cursor if there are more results
+    const continueCursor = endIndex < allBehaviors.length ? endIndex.toString() : null;
+    
+    return {
+      page,
+      continueCursor
+    };
+  },
 }); 

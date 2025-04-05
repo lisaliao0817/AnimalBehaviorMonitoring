@@ -149,4 +149,18 @@ export const countByOrganization = query({
     
     return speciesList.length;
   },
+});
+
+// Get species by IDs
+export const getByIds = query({
+  args: { ids: v.array(v.id("species")) },
+  handler: async (ctx, args) => {
+    const { ids } = args;
+    
+    const species = await Promise.all(
+      ids.map(async (id) => await ctx.db.get(id))
+    );
+    
+    return species.filter(Boolean); // Filter out any nulls
+  },
 }); 
