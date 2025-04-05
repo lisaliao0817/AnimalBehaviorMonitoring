@@ -6,9 +6,9 @@ import { api } from '@/convex/_generated/api';
 import { Id } from '@/convex/_generated/dataModel';
 import { format } from 'date-fns';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { Button } from '@/components/ui/button';
+// import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
-import { ClipboardList, FileText, Loader2 } from 'lucide-react';
+import { ClipboardList, FileText } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface ActivityFeedProps {
@@ -26,7 +26,7 @@ export function ActivityFeed({
 }: ActivityFeedProps) {
   const [limit] = useState(10);
   const [cursor, setCursor] = useState<string | undefined>(undefined);
-  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  // const [isLoadingMore, setIsLoadingMore] = useState(false);
   
   // Using any type with ESLint exception
   const [combinedActivity, setCombinedActivity] = useState<any[]>([]);
@@ -83,23 +83,22 @@ export function ActivityFeed({
     setCombinedActivity(combined);
   }, [behaviors, bodyExams, type]);
 
-  // Load more function
-  const loadMore = async () => {
-    if ((!behaviors?.continueCursor && !bodyExams?.continueCursor) || isLoadingMore) return;
-    
-    setIsLoadingMore(true);
-    
-    // Use the earliest continue cursor
-    if (behaviors?.continueCursor && bodyExams?.continueCursor) {
-      setCursor(behaviors.continueCursor);
-    } else if (behaviors?.continueCursor) {
-      setCursor(behaviors.continueCursor);
-    } else if (bodyExams?.continueCursor) {
-      setCursor(bodyExams.continueCursor);
-    }
-    
-    setIsLoadingMore(false);
-  };
+  // const loadMore = async () => {
+  //   if ((!behaviors?.continueCursor && !bodyExams?.continueCursor) || isLoadingMore) return;
+  //   
+  //   setIsLoadingMore(true);
+  //   
+  //   // Use the earliest continue cursor
+  //   if (behaviors?.continueCursor && bodyExams?.continueCursor) {
+  //     setCursor(behaviors.continueCursor);
+  //   } else if (behaviors?.continueCursor) {
+  //     setCursor(behaviors.continueCursor);
+  //   } else if (bodyExams?.continueCursor) {
+  //     setCursor(bodyExams.continueCursor);
+  //   }
+  //   
+  //   setIsLoadingMore(false);
+  // };
 
   // Loading state
   if (!behaviors && !bodyExams) {
