@@ -6,6 +6,59 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Date picker solid background fix */
+.rdp {
+  background-color: white !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border-radius: var(--radius) !important;
+  overflow: hidden !important;
+  border: 1px solid var(--border) !important;
+}
+
+.dark .rdp {
+  background-color: #1e1e1e !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+.rdp-months,
+.rdp-month,
+.rdp-table,
+.rdp-cell,
+.rdp-day,
+.rdp-head_cell,
+.rdp-row {
+  background-color: inherit !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Ensure consistent borders */
+.rdp-months {
+  border-radius: inherit !important;
+}
+
+/* Fix for Popover transparency */
+[data-radix-popper-content-wrapper] {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border-radius: var(--radius) !important;
+}
+
+[data-radix-popper-content-wrapper] > div {
+  background-color: white !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border-radius: var(--radius) !important;
+  overflow: hidden !important;
+  border: 1px solid var(--border) !important;
+}
+
+.dark [data-radix-popper-content-wrapper] > div {
+  background-color: #1e1e1e !important;
+}
+
 @layer base {
   :root {
     --background: #f8f8f8;
